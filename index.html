@@ -360,7 +360,8 @@
         // Disable all options and show the correct one
         Array.from(optionsEl.children).forEach((button, index) => {
             button.disabled = true;
-            if (quizData[currentQuestionIndex].answerOptions[index].isCorrect && !isCorrect) {
+            // If the user was incorrect, find and highlight the correct answer
+            if (!isCorrect && quizData[currentQuestionIndex].answerOptions[index].isCorrect) {
                 button.classList.add('correct');
             }
         });
@@ -407,3 +408,4 @@
 </script>
 </body>
 </html>
+
