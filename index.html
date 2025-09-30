@@ -15,17 +15,20 @@
         .option-card {
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
         }
-        .option-card:hover {
+        .option-card:hover:not(:disabled) {
             transform: translateY(-4px);
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
         .correct {
             border-color: #22c55e; /* green-500 */
-            background-color: #f0fdf4; /* green-50 */
+            background-color: #dcfce7; /* green-100 */
+            color: #15803d; /* green-700 */
+            font-weight: 700; /* Bold */
         }
         .incorrect {
             border-color: #ef4444; /* red-500 */
             background-color: #fef2f2; /* red-50 */
+            color: #991b1b; /* red-800 */
         }
     </style>
 </head>
@@ -79,206 +82,27 @@
 
 <script>
     const quizData = [
-        {
-            "question": "この契約に関する訴訟について、管轄裁判所はどこになると定められていますか？",
-            "answerOptions": [
-                { "text": "発注者の本店所在地を管轄する裁判所", "isCorrect": false, "rationale": "当事者の所在地ではなく、契約の準拠法に基づいて定められています。" },
-                { "text": "受注者の本店所在地を管轄する裁判所", "isCorrect": false, "rationale": "受注者の所在地が基準になるわけではありません。" },
-                { "text": "日本国の裁判所", "isCorrect": true, "rationale": "約款第1条11項で、この契約に係る訴訟は日本国の裁判所を専属的管轄裁判所とすると合意されています。" },
-                { "text": "両者協議の上で決定する", "isCorrect": false, "rationale": "約款であらかじめ合意されており、都度協議する事項ではありません。" }
-            ],
-            "hint": "約款の総則（第1条）には、契約全体に適用される国際的なルールについても記載されています。"
-        },
-        {
-            "question": "受注者が共同企業体（JV）の場合、発注者は契約に基づくすべての行為を誰に対して行いますか？",
-            "answerOptions": [
-                { "text": "共同企業体のすべての構成員に均等に行う", "isCorrect": false, "rationale": "実務上の煩雑さを避けるため、窓口は一本化されています。" },
-                { "text": "共同企業体の代表者に対して行う", "isCorrect": true, "rationale": "約款第1条12項により、発注者は共同企業体の代表者に対して行為を行い、それをもってすべての構成員に対して行ったものとみなされます。" },
-                { "text": "工事現場の現場代理人に対して行う", "isCorrect": false, "rationale": "現場代理人は現場の権限を持ちますが、契約行為全体の窓口はJVの代表者です。" },
-                { "text": "最も出資比率の高い構成員に対して行う", "isCorrect": false, "rationale": "出資比率ではなく、あらかじめ定められた「代表者」が窓口となります。" }
-            ],
-            "hint": "複数の企業が関わる契約をスムーズに進めるための、窓口の一本化に関するルールです。"
-        },
-        {
-            "question": "現場代理人に権限を委任しない事項がある場合、受注者はどうしなければなりませんか？",
-            "answerOptions": [
-                { "text": "あらかじめ、その権限の内容を発注者に通知する", "isCorrect": true, "rationale": "約款第10条3項に、受注者が自ら行使する権限がある場合は、あらかじめその内容を発注者に通知しなければならないと規定されています。" },
-                { "text": "監督員の承諾を得る", "isCorrect": false, "rationale": "これは承諾事項ではなく、受注者から発注者への通知事項です。" },
-                { "text": "契約書に特約として記載する", "isCorrect": false, "rationale": "契約書への記載までは求められておらず、事前の通知で足ります。" },
-                { "text": "特に手続きは不要", "isCorrect": false, "rationale": "発注者が権限の所在を把握できるよう、手続きが定められています。" }
-            ],
-            "hint": "約款第10条では、現場代理人の権限範囲を明確にするための手続きが定められています。"
-        },
-        {
-            "question": "検査の結果、不合格と決定された工事材料について、受注者はどうしなければなりませんか？",
-            "answerOptions": [
-                { "text": "監督員の指示に従い、現場内で保管する", "isCorrect": false, "rationale": "不合格品が誤って使用されるのを防ぐため、現場外への搬出が原則です。" },
-                { "text": "発注者と協議の上、減額して使用することができる", "isCorrect": false, "rationale": "品質を確保するため、不合格品の仕様は原則として認められません。" },
-                { "text": "定められた期間内に工事現場外へ搬出する", "isCorrect": true, "rationale": "約款第13条5項により、不合格と決定された工事材料は、決定を受けた日から定められた期間内に現場外へ搬出しなければなりません。" },
-                { "text": "受注者の責任で直ちに廃棄処分する", "isCorrect": false, "rationale": "まずは現場外への「搬出」が義務付けられています。その後の処分方法は別途の取り決めによります。" }
-            ],
-            "hint": "約款第13条には、品質基準を満たさない材料の取り扱いについて明確なルールがあります。"
-        },
-        {
-            "question": "支給材料や貸与品に対する、受注者の管理上の義務は何ですか？",
-            "answerOptions": [
-                { "text": "特に定めはない", "isCorrect": false, "rationale": "発注者の所有物であるため、適切な管理が義務付けられています。" },
-                { "text": "善良な管理者の注意をもって管理する義務", "isCorrect": true, "rationale": "約款第15条8項に、受注者は支給材料及び貸与品を「善良な管理者の注意をもって管理しなければならない」と規定されています。" },
-                { "text": "自己の財産と同一の注意をもって管理する義務", "isCorrect": false, "rationale": "民法上、「善良な管理者の注意」は「自己の財産と同一の注意」よりも高度な注意義務とされています。" },
-                { "text": "監督員の指示に従い管理する義務", "isCorrect": false, "rationale": "監督員の指示も重要ですが、約款ではより一般的な注意義務のレベルが定められています。" }
-            ],
-            "hint": "民法にも出てくる、他人の物を預かる際の基本的な注意義務のレベルに関する問題です。"
-        },
-        {
-            "question": "監督員の指示が原因で工事内容が設計図書に適合しなくなった場合、その改造に要する費用は原則として誰が負担しますか？",
-            "answerOptions": [
-                { "text": "受注者が負担する", "isCorrect": false, "rationale": "不適合の原因が受注者側にないため、受注者が負担するのは不合理です。" },
-                { "text": "発注者が負担する", "isCorrect": true, "rationale": "約款第17条1項で、不適合が監督員の指示など発注者の責に帰すべき事由によるときは、発注者が必要な費用を負担するとされています。" },
-                { "text": "発注者と受注者で折半する", "isCorrect": false, "rationale": "約款では原因に応じて責任の所在を明確にしており、折半という規定はありません。" },
-                { "text": "監督員個人が負担する", "isCorrect": false, "rationale": "監督員は発注者の代理人であり、最終的な契約上の責任は発注者が負います。" }
-            ],
-            "hint": "約款第17条は、設計図書との不適合が発生した際の責任の所在について定めています。"
-        },
-        {
-            "question": "受注者から条件変更等の確認請求があった場合、監督員が直ちに行うべきことは何ですか？",
-            "answerOptions": [
-                { "text": "発注者に報告し、指示を仰ぐ", "isCorrect": false, "rationale": "報告の前に、まず現場での事実確認が必要です。" },
-                { "text": "受注者の立会いの上、調査を行う", "isCorrect": true, "rationale": "約款第18条2項により、監督員は受注者の立会いの上、直ちに調査を行わなければならないとされています。" },
-                { "text": "工事を一時中断させる", "isCorrect": false, "rationale": "調査の結果、必要があれば中断することもありますが、最初の行動ではありません。" },
-                { "text": "設計図書の変更案を作成する", "isCorrect": false, "rationale": "設計変更は調査の後、必要性が認められた場合に行われます。" }
-            ],
-            "hint": "約款第18条に定められた、条件変更等が発生した際の「監督員」の初期対応に関する問題です。"
-        },
-        {
-            "question": "緊急やむを得ない事情により、受注者が監督員の意見を聴かずに臨機の措置をとった場合、その後どうすべきですか？",
-            "answerOptions": [
-                { "text": "事後、速やかに監督員の承諾を得る", "isCorrect": false, "rationale": "承諾ではなく、まずは行った措置の内容を伝えることが求められます。" },
-                { "text": "とった措置の内容を監督員に直ちに通知する", "isCorrect": true, "rationale": "約款第26条2項に、事後であっても、とった措置の内容を監督員に直ちに通知しなければならないと規定されています。" },
-                { "text": "次の定例会議で発注者に報告する", "isCorrect": false, "rationale": "緊急時の対応であるため、定例会議まで待つのではなく、直ちに通知する必要があります。" },
-                { "text": "措置に関する費用を精算し、発注者に請求する", "isCorrect": false, "rationale": "費用の請求の前に、まず措置内容の通知が必要です。" }
-            ],
-            "hint": "災害時などの緊急対応に関する約款第26条には、事前の連携だけでなく、事後の報告義務も定められています。"
-        },
-        {
-            "question": "受注者が請負代金の支払を請求できるのは、どのような条件を満したときですか？",
-            "answerOptions": [
-                { "text": "工事が完了したとき", "isCorrect": false, "rationale": "工事の完了だけでなく、その後の重要な手続きを経る必要があります。" },
-                { "text": "発注者に工事目的物を引き渡したとき", "isCorrect": false, "rationale": "引渡しの前に、その前提となる手続きが必要です。" },
-                { "text": "完成検査に合格したとき", "isCorrect": true, "rationale": "約款第32条1項に、受注者は完成検査に合格したときに請負代金の支払を請求できると規定されています。" },
-                { "text": "監督員が工事の完成を確認したとき", "isCorrect": false, "rationale": "監督員の確認ではなく、発注者（または検査員）による正式な「検査」に合格することが条件です。" }
-            ],
-            "hint": "請負代金という大きな権利が発生するための、最も重要なステップは何かを考えてみましょう。"
-        },
-        {
-            "question": "公共工事標準請負契約約款を作成し、その使用を勧告している機関はどこですか？",
-            "answerOptions": [
-                { "text": "各地方公共団体の契約担当部局", "isCorrect": false, "rationale": "各自治体はこれを使用しますが、作成しているのは国の中央機関です。" },
-                { "text": "建設業法を所管する国土交通省", "isCorrect": false, "rationale": "国土交通省が事務局ですが、作成主体として審議会の名称が挙げられています。" },
-                { "text": "中央建設業審議会", "isCorrect": true, "rationale": "資料の解説にある通り、国土交通省に設置されている中央建設業審議会が、公共工事の請負契約のひな形として作成しています。" },
-                { "text": "会計検査院", "isCorrect": false, "rationale": "会計検査院は国の決算を検査する機関であり、契約約款の作成は行いません。" }
-            ],
-            "hint": "資料の最初のページにある【解説】部分に、この約款の作成主体に関する記述があります。"
-        },
-        {
-            "question": "工事の施工方法について、約款ではどのように定められていますか？",
-            "answerOptions": [
-                { "text": "すべて設計図書で詳細に指定される", "isCorrect": false, "rationale": "設計図書で指定される部分もありますが、すべてではありません。" },
-                { "text": "原則として監督員の指示に従い定める", "isCorrect": false, "rationale": "監督員の指示は重要ですが、施工方法決定の第一義的な責任は受注者にあります。" },
-                { "text": "特段の定めがなければ、受注者がその責任において定める", "isCorrect": true, "rationale": "約款第1条3項に、仮設、施工方法その他工事目的物を完成するために必要な一切の手段は、受注者がその責任において定めると規定されています。" },
-                { "text": "発注者と受注者が協議して定める", "isCorrect": false, "rationale": "協議が必要な場面もありますが、原則的な責任の所在は受注者とされています。" }
-            ],
-            "hint": "工事を完成させるための具体的な手段を誰の責任で決めるか、という契約の基本に関する問題です。"
-        },
-        {
-            "question": "支給材料が引き渡された際、その品質が設計図書と異なると認めた場合、受注者はどうすべきですか？",
-            "answerOptions": [
-                { "text": "受領を拒否する", "isCorrect": false, "rationale": "まず行うべきは受領拒否ではなく、不適合の事実を通知することです。" },
-                { "text": "その旨を直ちに発注者に通知する", "isCorrect": true, "rationale": "約款第15条2項後段に、検査の結果、定めと異なり使用に適当でないと認めたときは、その旨を直ちに発注者に通知しなければならないとあります。" },
-                { "text": "代替品を自ら手配する", "isCorrect": false, "rationale": "支給材料の調達責任は発注者にあり、受注者が勝手に手配するものではありません。" },
-                { "text": "監督員の指示があるまで使用しない", "isCorrect": false, "rationale": "ただ待つだけでなく、不適合の事実を積極的に通知する義務があります。" }
-            ],
-            "hint": "約款第15条は、発注者から支給される材料に問題があった場合の、受注者の対応手順を定めています。"
-        },
-        {
-            "question": "契約の履行に関して用いる計量単位について、約款ではどのように定められていますか？",
-            "answerOptions": [
-                { "text": "すべて国際単位系（SI）に統一する", "isCorrect": false, "rationale": "国際単位系が基本ですが、根拠となる法律名が定められています。" },
-                { "text": "設計図書に特別の定めがなければ、計量法に定めるものとする", "isCorrect": true, "rationale": "約款第1条8項に、設計図書に特別の定めがある場合を除き、計量法に定めるものを使用すると規定されています。" },
-                { "text": "ヤード・ポンド法とメートル法を併記する", "isCorrect": false, "rationale": "日本の法律である計量法が基準とされています。" },
-                { "text": "発注者と受注者の間で別途協議する", "isCorrect": false, "rationale": "約款で基準が明確に定められています。" }
-            ],
-            "hint": "約款の総則（第1条）には、言語や通貨だけでなく、長さや重さなどの単位に関するルールも記載されています。"
-        },
-        {
-            "question": "受注者の故意または過失により支給材料を滅失・き損した場合の責任として、誤っているものはどれですか？",
-            "answerOptions": [
-                { "text": "発注者が指定した期間内に代品を納める", "isCorrect": false, "rationale": "約款第15条10項に定められた対応の一つです。" },
-                { "text": "原状に復して返還する", "isCorrect": false, "rationale": "これも約款第15条10項に定められた対応です。" },
-                { "text": "返還に代えて損害を賠償する", "isCorrect": false, "rationale": "これも約款第15条10項に定められた選択肢の一つです。" },
-                { "text": "請負代金から相当額を減額する", "isCorrect": true, "rationale": "約款第15条10項では、代品の納付、原状回復、損害賠償が定められており、請負代金からの減額という方法は規定されていません。" }
-            ],
-            "hint": "約款第15条は、受注者が発注者の所有物である支給材料を失ったり壊したりした場合の弁償方法について定めています。"
-        },
-        {
-            "question": "監督員が、受注者に対して臨機の措置をとることを「請求」できるのはどのような場合ですか？",
-            "answerOptions": [
-                { "text": "受注者の責により工事に遅れが生じている場合", "isCorrect": false, "rationale": "これは工程管理の問題であり、「臨機の措置」とは異なります。" },
-                { "text": "工事の品質に疑義が生じた場合", "isCorrect": false, "rationale": "これは品質管理の問題であり、検査や改造請求の対象となります。" },
-                { "text": "災害防止その他工事の施工上特に必要があると認めるとき", "isCorrect": true, "rationale": "約款第26条3項に、監督員は災害防止その他工事の施工上特に必要があると認めるとき、受注者に対して臨機の措置をとることを請求できるとあります。" },
-                { "text": "近隣住民から苦情が寄せられた場合", "isCorrect": false, "rationale": "近隣対応も重要ですが、約款上の「臨機の措置」は、より直接的な災害防止などを想定しています。" }
-            ],
-            "hint": "約款第26条では、受注者が自主的にとる臨機の措置だけでなく、監督員から「請求」されるケースも定められています。"
-        },
-        {
-            "question": "一括下請負の禁止規定で、「工事の主たる部分」とはどのようなものを指しますか？",
-            "answerOptions": [
-                { "text": "請負代金の50%を超える部分", "isCorrect": false, "rationale": "金額の割合だけで判断されるものではありません。" },
-                { "text": "施工期間の半分以上を占める部分", "isCorrect": false, "rationale": "期間の長さも判断材料の一つですが、それだけで決まるわけではありません。" },
-                { "text": "総合的な企画、指導、調整が必要不可欠な部分", "isCorrect": true, "rationale": "国土交通省のガイドライン等では、工事全体において主要な役割を担い、総合的なマネジメントが必要な部分と解釈されています。" },
-                { "text": "発注者が特に重要だと指定した部分", "isCorrect": false, "rationale": "発注者の指定も考慮されますが、客観的な工事内容から判断されます。" }
-            ],
-            "hint": "「主たる部分」の解釈は、単に量的な大きさだけでなく、工事全体における質的な重要性で判断されます。"
-        },
-        {
-            "question": "監理技術者の配置が必要となる工事の請負金額はいくら以上ですか？（法改正後の基準）",
-            "answerOptions": [
-                { "text": "3,000万円以上", "isCorrect": false, "rationale": "この金額は他の基準で使われることがあります。" },
-                { "text": "4,000万円以上", "isCorrect": false, "rationale": "これは法改正前の基準額です。" },
-                { "text": "4,500万円以上", "isCorrect": true, "rationale": "資料にある通り、2020年の法改正により、特定建設業者が元請として締結する下請契約の総額が4,500万円以上の場合に監理技術者の配置が必要となりました。" },
-                { "text": "6,000万円以上", "isCorrect": false, "rationale": "これは建築一式工事における改正前の基準額です。" }
-            ],
-            "hint": "資料の中の「主任技術者・監理技術者・現場代理人とは？」のページに、法改正後の新しい金額が記載されています。"
-        },
-        {
-            "question": "監督員が、設計図書に適合しないと認められる「相当の理由」がある場合に行える検査は何ですか？",
-            "answerOptions": [
-                { "text": "定期的な品質パトロール", "isCorrect": false, "rationale": "これは日常的な管理活動であり、特定の理由に基づく検査とは異なります。" },
-                { "text": "工事の施工部分を最小限度破壊して行う検査", "isCorrect": true, "rationale": "約款第17条3項に、相当の理由がある場合、監督員は施工部分を最小限度破壊して検査することができると規定されています。" },
-                { "text": "第三者機関による特別監査", "isCorrect": false, "rationale": "第三者機関の監査は、より重大な問題が発生した場合などに別途行われるものです。" },
-                { "text": "完成後の最終検査", "isCorrect": false, "rationale": "完成検査とは別に、施工の途中段階で疑義が生じた場合に行われる検査です。" }
-            ],
-            "hint": "約款第17条には、通常の検査だけでなく、より踏み込んだ検査を行うための条件が定められています。"
-        },
-        {
-            "question": "設計図書で明示されていない施工条件について、予期することのできない「特別な状態」が生じた場合、受注者はどうすべきですか？",
-            "answerOptions": [
-                { "text": "受注者の責任で対応する", "isCorrect": false, "rationale": "契約時に予期できなかった特別な状態は、受注者だけの責任で処理すべき問題ではありません。" },
-                { "text": "直ちに工事を中止し、発注者と協議する", "isCorrect": false, "rationale": "自己判断で中止する前に、まず監督員への通知と確認請求が必要です。" },
-                { "text": "直ちに監督員に通知し、その確認を請求する", "isCorrect": true, "rationale": "約款第18条1項の5号に定められており、このような場合は監督員への通知と確認請求の対象となります。" },
-                { "text": "追加の費用を見積もり、発注者に提出する", "isCorrect": false, "rationale": "費用の問題は、事実確認と調査の後で協議されます。最初の行動ではありません。" }
-            ],
-            "hint": "地中から予期せぬ障害物が出てきた、などのケースを想定してください。約款第18条に定められた手続きが適用されます。"
-        },
-        {
-            "question": "臨機の措置に要した費用のうち、請負代金額の範囲で受注者が負担することが適当でないと認められる部分については、誰が負担しますか？",
-            "answerOptions": [
-                { "text": "受注者が全額負担する", "isCorrect": false, "rationale": "緊急対応の費用がすべて受注者負担になると、必要な措置が躊躇される恐れがあるため、救済措置があります。" },
-                { "text": "発注者が負担する", "isCorrect": true, "rationale": "約款第26条4項に、受注者が通常の負担範囲を超える費用を要した場合、その部分は発注者が負担すると規定されています。" },
-                { "text": "国または地方公共団体が補助する", "isCorrect": false, "rationale": "費用負担はあくまで契約当事者である発注者と受注者の間で解決されます。" },
-                { "text": "保険会社が負担する", "isCorrect": false, "rationale": "別途保険に加入していれば保険金が支払われることもありますが、約款上の負担者は発注者です。" }
-            ],
-            "hint": "緊急時のやむを得ない対応によって受注者が過大な負担を負わないようにするための、費用に関するルールです。"
-        }
+        // (The quiz data is the same as before)
+        { "question": "この契約に関する訴訟について、管轄裁判所はどこになると定められていますか？", "answerOptions": [ { "text": "発注者の本店所在地を管轄する裁判所", "isCorrect": false, "rationale": "当事者の所在地ではなく、契約の準拠法に基づいて定められています。" }, { "text": "受注者の本店所在地を管轄する裁判所", "isCorrect": false, "rationale": "受注者の所在地が基準になるわけではありません。" }, { "text": "日本国の裁判所", "isCorrect": true, "rationale": "約款第1条11項で、この契約に係る訴訟は日本国の裁判所を専属的管轄裁判所とすると合意されています。" }, { "text": "両者協議の上で決定する", "isCorrect": false, "rationale": "約款であらかじめ合意されており、都度協議する事項ではありません。" } ], "hint": "約款の総則（第1条）には、契約全体に適用される国際的なルールについても記載されています。" },
+        { "question": "受注者が共同企業体（JV）の場合、発注者は契約に基づくすべての行為を誰に対して行いますか？", "answerOptions": [ { "text": "共同企業体のすべての構成員に均等に行う", "isCorrect": false, "rationale": "実務上の煩雑さを避けるため、窓口は一本化されています。" }, { "text": "共同企業体の代表者に対して行う", "isCorrect": true, "rationale": "約款第1条12項により、発注者は共同企業体の代表者に対して行為を行い、それをもってすべての構成員に対して行ったものとみなされます。" }, { "text": "工事現場の現場代理人に対して行う", "isCorrect": false, "rationale": "現場代理人は現場の権限を持ちますが、契約行為全体の窓口はJVの代表者です。" }, { "text": "最も出資比率の高い構成員に対して行う", "isCorrect": false, "rationale": "出資比率ではなく、あらかじめ定められた「代表者」が窓口となります。" } ], "hint": "複数の企業が関わる契約をスムーズに進めるための、窓口の一本化に関するルールです。" },
+        { "question": "現場代理人に権限を委任しない事項がある場合、受注者はどうしなければなりませんか？", "answerOptions": [ { "text": "あらかじめ、その権限の内容を発注者に通知する", "isCorrect": true, "rationale": "約款第10条3項に、受注者が自ら行使する権限がある場合は、あらかじめその内容を発注者に通知しなければならないと規定されています。" }, { "text": "監督員の承諾を得る", "isCorrect": false, "rationale": "これは承諾事項ではなく、受注者から発注者への通知事項です。" }, { "text": "契約書に特約として記載する", "isCorrect": false, "rationale": "契約書への記載までは求められておらず、事前の通知で足ります。" }, { "text": "特に手続きは不要", "isCorrect": false, "rationale": "発注者が権限の所在を把握できるよう、手続きが定められています。" } ], "hint": "約款第10条では、現場代理人の権限範囲を明確にするための手続きが定められています。" },
+        { "question": "検査の結果、不合格と決定された工事材料について、受注者はどうしなければなりませんか？", "answerOptions": [ { "text": "監督員の指示に従い、現場内で保管する", "isCorrect": false, "rationale": "不合格品が誤って使用されるのを防ぐため、現場外への搬出が原則です。" }, { "text": "発注者と協議の上、減額して使用することができる", "isCorrect": false, "rationale": "品質を確保するため、不合格品の仕様は原則として認められません。" }, { "text": "定められた期間内に工事現場外へ搬出する", "isCorrect": true, "rationale": "約款第13条5項により、不合格と決定された工事材料は、決定を受けた日から定められた期間内に現場外へ搬出しなければなりません。" }, { "text": "受注者の責任で直ちに廃棄処分する", "isCorrect": false, "rationale": "まずは現場外への「搬出」が義務付けられています。その後の処分方法は別途の取り決めによります。" } ], "hint": "約款第13条には、品質基準を満たさない材料の取り扱いについて明確なルールがあります。" },
+        { "question": "支給材料や貸与品に対する、受注者の管理上の義務は何ですか？", "answerOptions": [ { "text": "特に定めはない", "isCorrect": false, "rationale": "発注者の所有物であるため、適切な管理が義務付けられています。" }, { "text": "善良な管理者の注意をもって管理する義務", "isCorrect": true, "rationale": "約款第15条8項に、受注者は支給材料及び貸与品を「善良な管理者の注意をもって管理しなければならない」と規定されています。" }, { "text": "自己の財産と同一の注意をもって管理する義務", "isCorrect": false, "rationale": "民法上、「善良な管理者の注意」は「自己の財産と同一の注意」よりも高度な注意義務とされています。" }, { "text": "監督員の指示に従い管理する義務", "isCorrect": false, "rationale": "監督員の指示も重要ですが、約款ではより一般的な注意義務のレベルが定められています。" } ], "hint": "民法にも出てくる、他人の物を預かる際の基本的な注意義務のレベルに関する問題です。" },
+        { "question": "監督員の指示が原因で工事内容が設計図書に適合しなくなった場合、その改造に要する費用は原則として誰が負担しますか？", "answerOptions": [ { "text": "受注者が負担する", "isCorrect": false, "rationale": "不適合の原因が受注者側にないため、受注者が負担するのは不合理です。" }, { "text": "発注者が負担する", "isCorrect": true, "rationale": "約款第17条1項で、不適合が監督員の指示など発注者の責に帰すべき事由によるときは、発注者が必要な費用を負担するとされています。" }, { "text": "発注者と受注者で折半する", "isCorrect": false, "rationale": "約款では原因に応じて責任の所在を明確にしており、折半という規定はありません。" }, { "text": "監督員個人が負担する", "isCorrect": false, "rationale": "監督員は発注者の代理人であり、最終的な契約上の責任は発注者が負います。" } ], "hint": "約款第17条は、設計図書との不適合が発生した際の責任の所在について定めています。" },
+        { "question": "受注者から条件変更等の確認請求があった場合、監督員が直ちに行うべきことは何ですか？", "answerOptions": [ { "text": "発注者に報告し、指示を仰ぐ", "isCorrect": false, "rationale": "報告の前に、まず現場での事実確認が必要です。" }, { "text": "受注者の立会いの上、調査を行う", "isCorrect": true, "rationale": "約款第18条2項により、監督員は受注者の立会いの上、直ちに調査を行わなければならないとされています。" }, { "text": "工事を一時中断させる", "isCorrect": false, "rationale": "調査の結果、必要があれば中断することもありますが、最初の行動ではありません。" }, { "text": "設計図書の変更案を作成する", "isCorrect": false, "rationale": "設計変更は調査の後、必要性が認められた場合に行われます。" } ], "hint": "約款第18条に定められた、条件変更等が発生した際の「監督員」の初期対応に関する問題です。" },
+        { "question": "緊急やむを得ない事情により、受注者が監督員の意見を聴かずに臨機の措置をとった場合、その後どうすべきですか？", "answerOptions": [ { "text": "事後、速やかに監督員の承諾を得る", "isCorrect": false, "rationale": "承諾ではなく、まずは行った措置の内容を伝えることが求められます。" }, { "text": "とった措置の内容を監督員に直ちに通知する", "isCorrect": true, "rationale": "約款第26条2項に、事後であっても、とった措置の内容を監督員に直ちに通知しなければならないと規定されています。" }, { "text": "次の定例会議で発注者に報告する", "isCorrect": false, "rationale": "緊急時の対応であるため、定例会議まで待つのではなく、直ちに通知する必要があります。" }, { "text": "措置に関する費用を精算し、発注者に請求する", "isCorrect": false, "rationale": "費用の請求の前に、まず措置内容の通知が必要です。" } ], "hint": "災害時などの緊急対応に関する約款第26条には、事前の連携だけでなく、事後の報告義務も定められています。" },
+        { "question": "受注者が請負代金の支払を請求できるのは、どのような条件を満したときですか？", "answerOptions": [ { "text": "工事が完了したとき", "isCorrect": false, "rationale": "工事の完了だけでなく、その後の重要な手続きを経る必要があります。" }, { "text": "発注者に工事目的物を引き渡したとき", "isCorrect": false, "rationale": "引渡しの前に、その前提となる手続きが必要です。" }, { "text": "完成検査に合格したとき", "isCorrect": true, "rationale": "約款第32条1項に、受注者は完成検査に合格したときに請負代金の支払を請求できると規定されています。" }, { "text": "監督員が工事の完成を確認したとき", "isCorrect": false, "rationale": "監督員の確認ではなく、発注者（または検査員）による正式な「検査」に合格することが条件です。" } ], "hint": "請負代金という大きな権利が発生するための、最も重要なステップは何かを考えてみましょう。" },
+        { "question": "公共工事標準請負契約約款を作成し、その使用を勧告している機関はどこですか？", "answerOptions": [ { "text": "各地方公共団体の契約担当部局", "isCorrect": false, "rationale": "各自治体はこれを使用しますが、作成しているのは国の中央機関です。" }, { "text": "建設業法を所管する国土交通省", "isCorrect": false, "rationale": "国土交通省が事務局ですが、作成主体として審議会の名称が挙げられています。" }, { "text": "中央建設業審議会", "isCorrect": true, "rationale": "資料の解説にある通り、国土交通省に設置されている中央建設業審議会が、公共工事の請負契約のひな形として作成しています。" }, { "text": "会計検査院", "isCorrect": false, "rationale": "会計検査院は国の決算を検査する機関であり、契約約款の作成は行いません。" } ], "hint": "資料の最初のページにある【解説】部分に、この約款の作成主体に関する記述があります。" },
+        { "question": "工事の施工方法について、約款ではどのように定められていますか？", "answerOptions": [ { "text": "すべて設計図書で詳細に指定される", "isCorrect": false, "rationale": "設計図書で指定される部分もありますが、すべてではありません。" }, { "text": "原則として監督員の指示に従い定める", "isCorrect": false, "rationale": "監督員の指示は重要ですが、施工方法決定の第一義的な責任は受注者にあります。" }, { "text": "特段の定めがなければ、受注者がその責任において定める", "isCorrect": true, "rationale": "約款第1条3項に、仮設、施工方法その他工事目的物を完成するために必要な一切の手段は、受注者がその責任において定めると規定されています。" }, { "text": "発注者と受注者が協議して定める", "isCorrect": false, "rationale": "協議が必要な場面もありますが、原則的な責任の所在は受注者とされています。" } ], "hint": "工事を完成させるための具体的な手段を誰の責任で決めるか、という契約の基本に関する問題です。" },
+        { "question": "支給材料が引き渡された際、その品質が設計図書と異なると認めた場合、受注者はどうすべきですか？", "answerOptions": [ { "text": "受領を拒否する", "isCorrect": false, "rationale": "まず行うべきは受領拒否ではなく、不適合の事実を通知することです。" }, { "text": "その旨を直ちに発注者に通知する", "isCorrect": true, "rationale": "約款第15条2項後段に、検査の結果、定めと異なり使用に適当でないと認めたときは、その旨を直ちに発注者に通知しなければならないとあります。" }, { "text": "代替品を自ら手配する", "isCorrect": false, "rationale": "支給材料の調達責任は発注者にあり、受注者が勝手に手配するものではありません。" }, { "text": "監督員の指示があるまで使用しない", "isCorrect": false, "rationale": "ただ待つだけでなく、不適合の事実を積極的に通知する義務があります。" } ], "hint": "約款第15条は、発注者から支給される材料に問題があった場合の、受注者の対応手順を定めています。" },
+        { "question": "契約の履行に関して用いる計量単位について、約款ではどのように定められていますか？", "answerOptions": [ { "text": "すべて国際単位系（SI）に統一する", "isCorrect": false, "rationale": "国際単位系が基本ですが、根拠となる法律名が定められています。" }, { "text": "設計図書に特別の定めがなければ、計量法に定めるものとする", "isCorrect": true, "rationale": "約款第1条8項に、設計図書に特別の定めがある場合を除き、計量法に定めるものを使用すると規定されています。" }, { "text": "ヤード・ポンド法とメートル法を併記する", "isCorrect": false, "rationale": "日本の法律である計量法が基準とされています。" }, { "text": "発注者と受注者の間で別途協議する", "isCorrect": false, "rationale": "約款で基準が明確に定められています。" } ], "hint": "約款の総則（第1条）には、言語や通貨だけでなく、長さや重さなどの単位に関するルールも記載されています。" },
+        { "question": "受注者の故意または過失により支給材料を滅失・き損した場合の責任として、誤っているものはどれですか？", "answerOptions": [ { "text": "発注者が指定した期間内に代品を納める", "isCorrect": false, "rationale": "約款第15条10項に定められた対応の一つです。" }, { "text": "原状に復して返還する", "isCorrect": false, "rationale": "これも約款第15条10項に定められた対応です。" }, { "text": "返還に代えて損害を賠償する", "isCorrect": false, "rationale": "これも約款第15条10項に定められた選択肢の一つです。" }, { "text": "請負代金から相当額を減額する", "isCorrect": true, "rationale": "約款第15条10項では、代品の納付、原状回復、損害賠償が定められており、請負代金からの減額という方法は規定されていません。" } ], "hint": "約款第15条は、受注者が発注者の所有物である支給材料を失ったり壊したりした場合の弁償方法について定めています。" },
+        { "question": "監督員が、受注者に対して臨機の措置をとることを「請求」できるのはどのような場合ですか？", "answerOptions": [ { "text": "受注者の責により工事に遅れが生じている場合", "isCorrect": false, "rationale": "これは工程管理の問題であり、「臨機の措置」とは異なります。" }, { "text": "工事の品質に疑義が生じた場合", "isCorrect": false, "rationale": "これは品質管理の問題であり、検査や改造請求の対象となります。" }, { "text": "災害防止その他工事の施工上特に必要があると認めるとき", "isCorrect": true, "rationale": "約款第26条3項に、監督員は災害防止その他工事の施工上特に必要があると認めるとき、受注者に対して臨機の措置をとることを請求できるとあります。" }, { "text": "近隣住民から苦情が寄せられた場合", "isCorrect": false, "rationale": "近隣対応も重要ですが、約款上の「臨機の措置」は、より直接的な災害防止などを想定しています。" } ], "hint": "約款第26条では、受注者が自主的にとる臨機の措置だけでなく、監督員から「請求」されるケースも定められています。" },
+        { "question": "一括下請負の禁止規定で、「工事の主たる部分」とはどのようなものを指しますか？", "answerOptions": [ { "text": "請負代金の50%を超える部分", "isCorrect": false, "rationale": "金額の割合だけで判断されるものではありません。" }, { "text": "施工期間の半分以上を占める部分", "isCorrect": false, "rationale": "期間の長さも判断材料の一つですが、それだけで決まるわけではありません。" }, { "text": "総合的な企画、指導、調整が必要不可欠な部分", "isCorrect": true, "rationale": "国土交通省のガイドライン等では、工事全体において主要な役割を担い、総合的なマネジメントが必要な部分と解釈されています。" }, { "text": "発注者が特に重要だと指定した部分", "isCorrect": false, "rationale": "発注者の指定も考慮されますが、客観的な工事内容から判断されます。" } ], "hint": "「主たる部分」の解釈は、単に量的な大きさだけでなく、工事全体における質的な重要性で判断されます。" },
+        { "question": "監理技術者の配置が必要となる工事の請負金額はいくら以上ですか？（法改正後の基準）", "answerOptions": [ { "text": "3,000万円以上", "isCorrect": false, "rationale": "この金額は他の基準で使われることがあります。" }, { "text": "4,000万円以上", "isCorrect": false, "rationale": "これは法改正前の基準額です。" }, { "text": "4,500万円以上", "isCorrect": true, "rationale": "資料にある通り、2020年の法改正により、特定建設業者が元請として締結する下請契約の総額が4,500万円以上の場合に監理技術者の配置が必要となりました。" }, { "text": "6,000万円以上", "isCorrect": false, "rationale": "これは建築一式工事における改正前の基準額です。" } ], "hint": "資料の中の「主任技術者・監理技術者・現場代理人とは？」のページに、法改正後の新しい金額が記載されています。" },
+        { "question": "監督員が、設計図書に適合しないと認められる「相当の理由」がある場合に行える検査は何ですか？", "answerOptions": [ { "text": "定期的な品質パトロール", "isCorrect": false, "rationale": "これは日常的な管理活動であり、特定の理由に基づく検査とは異なります。" }, { "text": "工事の施工部分を最小限度破壊して行う検査", "isCorrect": true, "rationale": "約款第17条3項に、相当の理由がある場合、監督員は施工部分を最小限度破壊して検査することができると規定されています。" }, { "text": "第三者機関による特別監査", "isCorrect": false, "rationale": "第三者機関の監査は、より重大な問題が発生した場合などに別途行われるものです。" }, { "text": "完成後の最終検査", "isCorrect": false, "rationale": "完成検査とは別に、施工の途中段階で疑義が生じた場合に行われる検査です。" } ], "hint": "約款第17条には、通常の検査だけでなく、より踏み込んだ検査を行うための条件が定められています。" },
+        { "question": "設計図書で明示されていない施工条件について、予期することのできない「特別な状態」が生じた場合、受注者はどうすべきですか？", "answerOptions": [ { "text": "受注者の責任で対応する", "isCorrect": false, "rationale": "契約時に予期できなかった特別な状態は、受注者だけの責任で処理すべき問題ではありません。" }, { "text": "直ちに工事を中止し、発注者と協議する", "isCorrect": false, "rationale": "自己判断で中止する前に、まず監督員への通知と確認請求が必要です。" }, { "text": "直ちに監督員に通知し、その確認を請求する", "isCorrect": true, "rationale": "約款第18条1項の5号に定められており、このような場合は監督員への通知と確認請求の対象となります。" }, { "text": "追加の費用を見積もり、発注者に提出する", "isCorrect": false, "rationale": "費用の問題は、事実確認と調査の後で協議されます。最初の行動ではありません。" } ], "hint": "地中から予期せぬ障害物が出てきた、などのケースを想定してください。約款第18条に定められた手続きが適用されます。" },
+        { "question": "臨機の措置に要した費用のうち、請負代金額の範囲で受注者が負担することが適当でないと認められる部分については、誰が負担しますか？", "answerOptions": [ { "text": "受注者が全額負担する", "isCorrect": false, "rationale": "緊急対応の費用がすべて受注者負担になると、必要な措置が躊躇される恐れがあるため、救済措置があります。" }, { "text": "発注者が負担する", "isCorrect": true, "rationale": "約款第26条4項に、受注者が通常の負担範囲を超える費用を要した場合、その部分は発注者が負担すると規定されています。" }, { "text": "国または地方公共団体が補助する", "isCorrect": false, "rationale": "費用負担はあくまで契約当事者である発注者と受注者の間で解決されます。" }, { "text": "保険会社が負担する", "isCorrect": false, "rationale": "別途保険に加入していれば保険金が支払われることもありますが、約款上の負担者は発注者です。" } ], "hint": "緊急時のやむを得ない対応によって受注者が過大な負担を負わないようにするための、費用に関するルールです。" }
     ];
 
     // DOM Elements
@@ -331,11 +155,10 @@
             const optionElement = document.createElement('button');
             optionElement.className = 'option-card w-full text-left p-4 border-2 border-slate-200 rounded-lg bg-white hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400';
             optionElement.innerHTML = `<span class="font-bold mr-2">${String.fromCharCode(65 + index)}.</span> ${option.text}`;
-            optionElement.onclick = () => selectAnswer(optionElement, option.isCorrect, option.rationale);
+            optionElement.onclick = () => selectAnswer(optionElement, option);
             optionsEl.appendChild(optionElement);
         });
 
-        // Update next button text for the last question
         if (currentQuestionIndex === quizData.length - 1) {
             nextButton.textContent = '結果を見る';
         } else {
@@ -343,34 +166,36 @@
         }
     }
 
-    function selectAnswer(selectedButton, isCorrect, rationale) {
-        if (answerSelected) return; // Prevent changing answer
+    function selectAnswer(selectedButton, selectedOption) {
+        if (answerSelected) return;
         answerSelected = true;
         nextButton.disabled = false;
         hintButton.classList.add('hidden');
 
-        // Update score
-        if (isCorrect) {
+        const currentQuestion = quizData[currentQuestionIndex];
+        
+        // Style the selected button as correct or incorrect
+        if (selectedOption.isCorrect) {
             score++;
             selectedButton.classList.add('correct');
         } else {
             selectedButton.classList.add('incorrect');
         }
 
-        // Disable all options and show the correct one
-        Array.from(optionsEl.children).forEach((button, index) => {
-            button.disabled = true;
-            // If the user was incorrect, find and highlight the correct answer
-            if (!isCorrect && quizData[currentQuestionIndex].answerOptions[index].isCorrect) {
-                button.classList.add('correct');
+        // Disable all buttons and find and highlight the correct one
+        const allOptionButtons = Array.from(optionsEl.children);
+        currentQuestion.answerOptions.forEach((option, index) => {
+            allOptionButtons[index].disabled = true;
+            if (option.isCorrect) {
+                allOptionButtons[index].classList.add('correct');
             }
         });
 
-        // Show feedback/rationale
+        // Show detailed feedback/rationale
         const feedbackContent = `
-            <div class="p-4 rounded-lg ${isCorrect ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}">
-                <h3 class="font-bold text-lg mb-1">${isCorrect ? '正解です！' : '不正解です'}</h3>
-                <p class="text-sm">${rationale}</p>
+            <div class="p-4 rounded-lg ${selectedOption.isCorrect ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}">
+                <h3 class="font-bold text-lg mb-1">${selectedOption.isCorrect ? '正解です！' : '不正解です'}</h3>
+                <p class="text-sm">${selectedOption.rationale}</p>
             </div>
         `;
         feedbackEl.innerHTML = feedbackContent;
